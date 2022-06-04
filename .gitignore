@@ -1,4 +1,5 @@
 vue/node_modules
+vue/package-lock.json
 vue/dist
 release/
 .idea/
