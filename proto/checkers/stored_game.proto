@@ -9,6 +9,7 @@ message StoredGame {
   string turn = 3; 
   string red = 4; 
   string black = 5; 
+  string creator = 6;
   
 }
 
