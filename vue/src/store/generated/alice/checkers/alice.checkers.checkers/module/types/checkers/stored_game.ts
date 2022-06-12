@@ -9,6 +9,7 @@ export interface StoredGame {
   turn: string;
   red: string;
   black: string;
+  creator: string;
 }
 
 const baseStoredGame: object = {
@@ -17,6 +18,7 @@ const baseStoredGame: object = {
   turn: "",
   red: "",
   black: "",
+  creator: "",
 };
 
 export const StoredGame = {
@@ -35,6 +37,9 @@ export const StoredGame = {
     }
     if (message.black !== "") {
       writer.uint32(42).string(message.black);
+    }
+    if (message.creator !== "") {
+      writer.uint32(50).string(message.creator);
     }
     return writer;
   },
@@ -60,6 +65,9 @@ export const StoredGame = {
           break;
         case 5:
           message.black = reader.string();
+          break;
+        case 6:
+          message.creator = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -96,6 +104,11 @@ export const StoredGame = {
     } else {
       message.black = "";
     }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = String(object.creator);
+    } else {
+      message.creator = "";
+    }
     return message;
   },
 
@@ -106,6 +119,7 @@ export const StoredGame = {
     message.turn !== undefined && (obj.turn = message.turn);
     message.red !== undefined && (obj.red = message.red);
     message.black !== undefined && (obj.black = message.black);
+    message.creator !== undefined && (obj.creator = message.creator);
     return obj;
   },
 
@@ -135,6 +149,11 @@ export const StoredGame = {
       message.black = object.black;
     } else {
       message.black = "";
+    }
+    if (object.creator !== undefined && object.creator !== null) {
+      message.creator = object.creator;
+    } else {
+      message.creator = "";
     }
     return message;
   },

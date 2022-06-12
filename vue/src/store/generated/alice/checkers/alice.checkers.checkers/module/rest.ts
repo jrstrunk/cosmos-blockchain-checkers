@@ -9,6 +9,10 @@
  * ---------------------------------------------------------------
  */
 
+export interface CheckersMsgCreateGameResponse {
+  idValue?: string;
+}
+
 export interface CheckersNextGame {
   /** @format uint64 */
   idValue?: string;
@@ -56,6 +60,7 @@ export interface CheckersStoredGame {
   turn?: string;
   red?: string;
   black?: string;
+  creator?: string;
 }
 
 export interface ProtobufAny {

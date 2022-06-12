@@ -101,6 +101,8 @@ paths:
                       type: string
                     black:
                       type: string
+                    creator:
+                      type: string
               pagination:
                 type: object
                 properties:
@@ -227,6 +229,8 @@ paths:
                   red:
                     type: string
                   black:
+                    type: string
+                  creator:
                     type: string
         default:
           description: An unexpected error response.
@@ -29947,6 +29951,11 @@ paths:
       tags:
         - Query
 definitions:
+  alice.checkers.checkers.MsgCreateGameResponse:
+    type: object
+    properties:
+      idValue:
+        type: string
   alice.checkers.checkers.NextGame:
     type: object
     properties:
@@ -29973,6 +29982,8 @@ definitions:
             red:
               type: string
             black:
+              type: string
+            creator:
               type: string
       pagination:
         type: object
@@ -30024,6 +30035,8 @@ definitions:
             type: string
           black:
             type: string
+          creator:
+            type: string
   alice.checkers.checkers.QueryParamsResponse:
     type: object
     properties:
@@ -30043,6 +30056,8 @@ definitions:
       red:
         type: string
       black:
+        type: string
+      creator:
         type: string
   cosmos.base.query.v1beta1.PageRequest:
     type: object
