@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/alice/checkers/x/checkers/rules"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -34,4 +35,42 @@ func (storedGame *StoredGame) ParseGame() (game *rules.Game, err error) {
 		return nil, sdkerrors.Wrapf(errors.New(fmt.Sprintf("Turn: %s", storedGame.Turn)), ErrGameNotParseable.Error())
 	}
 	return game, nil
+}
+
+func (storedGame *StoredGame) GetGameIndex() (index int, err error) {
+	indexStr := storedGame.Index
+	if indexStr == "" {
+		return index, sdkerrors.Wrapf(errors.New("invalid index"), ErrInvalidCreator.Error(), storedGame.Creator)
+	}
+	index, err = strconv.Atoi(indexStr)
+	if err != nil {
+		return index, sdkerrors.Wrapf(err, ErrInvalidCreator.Error(), storedGame.Creator)
+	}
+	return index, nil
+}
+
+func (storedGame *StoredGame) Validate() (err error) {
+	// in order for a stored game to be valid, all getter functions must be able to be
+	// called without an error
+	_, err = storedGame.GetCreatorAddress()
+	if err != nil {
+		return
+	}
+	_, err = storedGame.GetRedAddress()
+	if err != nil {
+		return
+	}
+	_, err = storedGame.GetBlackAddress()
+	if err != nil {
+		return
+	}
+	_, err = storedGame.ParseGame()
+	if err != nil {
+		return
+	}
+	_, err = storedGame.GetGameIndex()
+	if err != nil {
+		return
+	}
+	return
 }
