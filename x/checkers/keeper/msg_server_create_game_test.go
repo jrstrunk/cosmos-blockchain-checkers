@@ -1,10 +1,15 @@
 package keeper_test
 
 import (
+	"context"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	keepertest "github.com/alice/checkers/testutil/keeper"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/alice/checkers/x/checkers"
+	"github.com/alice/checkers/x/checkers/keeper"
 	"github.com/alice/checkers/x/checkers/types"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -13,8 +18,14 @@ const (
 	carol = "cosmos1e0w5t53nrq7p66fye6c8p0ynyhf6y24l4yuxd7"
 )
 
+func setupMsgServerCreateGame(t testing.TB) (types.MsgServer, keeper.Keeper, context.Context) {
+	k, ctx := keepertest.CheckersKeeper(t)
+	checkers.InitGenesis(ctx, *k, *types.DefaultGenesis())
+	return keeper.NewMsgServerImpl(*k), *k, sdk.WrapSDKContext(ctx)
+}
+
 func TestCreateGame(t *testing.T) {
-	msgServer, context := setupMsgServer(t)
+	msgServer, _, context := setupMsgServerCreateGame(t)
 	createResponse, err := msgServer.CreateGame(context, &types.MsgCreateGame{
 		Creator: alice,
 		Red:     bob,
@@ -22,6 +33,6 @@ func TestCreateGame(t *testing.T) {
 	})
 	require.Nil(t, err)
 	require.EqualValues(t, types.MsgCreateGameResponse{
-		IdValue: "", // TODO: update with a proper value when updated
+		IdValue: "1", // TODO: update with a proper value when updated
 	}, *createResponse)
 }
