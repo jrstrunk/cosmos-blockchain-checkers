@@ -12,5 +12,5 @@ var (
 	ErrInvalidRed       = sdkerrors.Register(ModuleName, 1101, "red address is invalid: %s")
 	ErrInvalidBlack     = sdkerrors.Register(ModuleName, 1102, "black address is invalid: %s")
 	ErrGameNotParseable = sdkerrors.Register(ModuleName, 1103, "game cannot be parsed")
-	ErrInvalidIndex     = sdkerrors.Register(ModuleName, 1103, "game index is invalid: %s")
+	ErrInvalidIndex     = sdkerrors.Register(ModuleName, 1104, "game index is invalid: %s")
 )
