@@ -29969,6 +29969,8 @@ definitions:
         format: int64
       winner:
         type: string
+  alice.checkers.checkers.MsgRejectGameResponse:
+    type: object
   alice.checkers.checkers.NextGame:
     type: object
     properties:
