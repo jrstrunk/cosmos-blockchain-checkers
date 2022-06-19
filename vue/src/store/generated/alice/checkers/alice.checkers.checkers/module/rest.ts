@@ -74,6 +74,9 @@ export interface CheckersStoredGame {
   red?: string;
   black?: string;
   creator?: string;
+
+  /** @format uint64 */
+  moveCount?: string;
 }
 
 export interface ProtobufAny {
