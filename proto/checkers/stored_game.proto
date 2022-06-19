@@ -11,6 +11,8 @@ message StoredGame {
   string black = 5; 
   string creator = 6;
   uint64 moveCount = 7;
+  string beforeId = 8;
+  string afterId = 9;
   
 }
 
