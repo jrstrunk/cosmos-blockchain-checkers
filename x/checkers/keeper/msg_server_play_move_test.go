@@ -82,7 +82,9 @@ func TestPlayMoveSavedGame(t *testing.T) {
 	nextGame, found := keeper.GetNextGame(sdk.UnwrapSDKContext(context))
 	require.True(t, found)
 	require.EqualValues(t, types.NextGame{
-		IdValue: 2,
+		IdValue:  2,
+		FifoHead: "1",
+		FifoTail: "1",
 	}, nextGame)
 	game1, found := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1")
 	require.True(t, found)
