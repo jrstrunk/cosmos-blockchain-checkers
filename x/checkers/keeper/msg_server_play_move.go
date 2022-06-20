@@ -59,12 +59,20 @@ func (k msgServer) PlayMove(goCtx context.Context, msg *types.MsgPlayMove) (*typ
 	if moveErr != nil {
 		return nil, sdkerrors.Wrapf(types.ErrWrongMove, moveErr.Error())
 	}
+	storedGame.MoveCount++
+
+	// send game to the back of the FIFO
+	nextGame, found := k.Keeper.GetNextGame(ctx)
+	if !found {
+		panic("NextGame not found")
+	}
+	k.Keeper.SendToFifoTail(ctx, &storedGame, &nextGame)
 
 	// save the modified game state
-	storedGame.MoveCount++
 	storedGame.Game = game.String()
 	storedGame.Turn = rules.PieceStrings[game.Turn]
 	k.Keeper.SetStoredGame(ctx, storedGame)
+	k.Keeper.SetNextGame(ctx, nextGame)
 
 	// emit an event to tell the players one of them has made a move
 	ctx.EventManager().EmitEvent(

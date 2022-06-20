@@ -32,8 +32,14 @@ func (k msgServer) RejectGame(goCtx context.Context, msg *types.MsgRejectGame) (
 		return nil, types.ErrCreatorNotPlayer
 	}
 
-	// if there were no errors, reject the game by removing it from the store
+	// if there were no errors, reject the game by removing it from the store and FIFO game list
+	nextGame, found := k.Keeper.GetNextGame(ctx)
+	if !found {
+		panic("NextGame not found")
+	}
+	k.Keeper.RemoveFromFifo(ctx, &storedGame, &nextGame)
 	k.Keeper.RemoveStoredGame(ctx, msg.IdValue)
+	k.Keeper.SetNextGame(ctx, nextGame)
 
 	// emit a reject game event
 	ctx.EventManager().EmitEvent(
