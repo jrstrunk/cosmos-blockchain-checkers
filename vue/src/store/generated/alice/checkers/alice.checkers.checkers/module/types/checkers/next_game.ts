@@ -6,14 +6,24 @@ export const protobufPackage = "alice.checkers.checkers";
 
 export interface NextGame {
   idValue: number;
+  /** Will contain the index of the game at the head. */
+  fifoHead: string;
+  /** Will contain the index of the game at the tail. */
+  fifoTail: string;
 }
 
-const baseNextGame: object = { idValue: 0 };
+const baseNextGame: object = { idValue: 0, fifoHead: "", fifoTail: "" };
 
 export const NextGame = {
   encode(message: NextGame, writer: Writer = Writer.create()): Writer {
     if (message.idValue !== 0) {
       writer.uint32(8).uint64(message.idValue);
+    }
+    if (message.fifoHead !== "") {
+      writer.uint32(26).string(message.fifoHead);
+    }
+    if (message.fifoTail !== "") {
+      writer.uint32(34).string(message.fifoTail);
     }
     return writer;
   },
@@ -27,6 +37,12 @@ export const NextGame = {
       switch (tag >>> 3) {
         case 1:
           message.idValue = longToNumber(reader.uint64() as Long);
+          break;
+        case 3:
+          message.fifoHead = reader.string();
+          break;
+        case 4:
+          message.fifoTail = reader.string();
           break;
         default:
           reader.skipType(tag & 7);
@@ -43,12 +59,24 @@ export const NextGame = {
     } else {
       message.idValue = 0;
     }
+    if (object.fifoHead !== undefined && object.fifoHead !== null) {
+      message.fifoHead = String(object.fifoHead);
+    } else {
+      message.fifoHead = "";
+    }
+    if (object.fifoTail !== undefined && object.fifoTail !== null) {
+      message.fifoTail = String(object.fifoTail);
+    } else {
+      message.fifoTail = "";
+    }
     return message;
   },
 
   toJSON(message: NextGame): unknown {
     const obj: any = {};
     message.idValue !== undefined && (obj.idValue = message.idValue);
+    message.fifoHead !== undefined && (obj.fifoHead = message.fifoHead);
+    message.fifoTail !== undefined && (obj.fifoTail = message.fifoTail);
     return obj;
   },
 
@@ -58,6 +86,16 @@ export const NextGame = {
       message.idValue = object.idValue;
     } else {
       message.idValue = 0;
+    }
+    if (object.fifoHead !== undefined && object.fifoHead !== null) {
+      message.fifoHead = object.fifoHead;
+    } else {
+      message.fifoHead = "";
+    }
+    if (object.fifoTail !== undefined && object.fifoTail !== null) {
+      message.fifoTail = object.fifoTail;
+    } else {
+      message.fifoTail = "";
     }
     return message;
   },
