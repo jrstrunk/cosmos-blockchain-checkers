@@ -20,9 +20,7 @@ func (k Keeper) RemoveFromFifo(ctx sdk.Context, game *types.StoredGame, nextGame
 		// Is it at the FIFO head?
 	} else if nextGame.FifoHead == game.Index {
 		nextGame.FifoHead = game.AfterId
-	} else {
-		panic("Game does not have a predecessor and is not at the FIFO head")
-	}
+	} // Else it is the first game in the fifo
 	// Does it have a successor?
 	if game.AfterId != types.NoFifoIdKey {
 		successorGame, found := k.GetStoredGame(ctx, game.AfterId)
@@ -37,9 +35,7 @@ func (k Keeper) RemoveFromFifo(ctx sdk.Context, game *types.StoredGame, nextGame
 		// Is it at the FIFO tail?
 	} else if nextGame.FifoTail == game.Index {
 		nextGame.FifoTail = game.BeforeId
-	} else {
-		panic("Game does not have a successor and is not at the FIFO tail")
-	}
+	} // Else it is the first game in the fifo
 	// these changes to game, as well as previous changes to nextGame, are not saved to
 	// memory, that should be done after this function call
 	game.BeforeId = types.NoFifoIdKey
