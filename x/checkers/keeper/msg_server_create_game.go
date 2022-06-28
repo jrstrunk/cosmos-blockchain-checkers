@@ -32,7 +32,8 @@ func (k msgServer) CreateGame(goCtx context.Context, msg *types.MsgCreateGame) (
 		MoveCount: 0,
 		BeforeId:  types.NoFifoIdKey,
 		AfterId:   types.NoFifoIdKey,
-		Deadline: types.FormatDeadline(types.GetNextDeadline(ctx)),
+		Deadline:  types.FormatDeadline(types.GetNextDeadline(ctx)),
+		Winner:    rules.PieceStrings[rules.NO_PLAYER],
 	}
 
 	// validate that the new game has been created correctly
