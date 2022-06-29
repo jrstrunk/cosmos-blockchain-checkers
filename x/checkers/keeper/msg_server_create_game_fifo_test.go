@@ -42,6 +42,7 @@ func TestCreate3GamesHasSavedFifo(t *testing.T) {
 		BeforeId:  "-1",
 		AfterId:   "2",
 		Deadline:  types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+		Winner:    "*",
 	}, game1)
 	game2, found2 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "2")
 	require.True(t, found2)
@@ -56,6 +57,7 @@ func TestCreate3GamesHasSavedFifo(t *testing.T) {
 		BeforeId:  "1",
 		AfterId:   "-1",
 		Deadline:  types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+		Winner:    "*",
 	}, game2)
 
 	msgSrvr.CreateGame(context, &types.MsgCreateGame{
@@ -83,6 +85,7 @@ func TestCreate3GamesHasSavedFifo(t *testing.T) {
 		BeforeId:  "-1",
 		AfterId:   "2",
 		Deadline:  types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+		Winner:    "*",
 	}, game1)
 	game2, found2 = keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "2")
 	require.True(t, found2)
@@ -97,6 +100,7 @@ func TestCreate3GamesHasSavedFifo(t *testing.T) {
 		BeforeId:  "1",
 		AfterId:   "3",
 		Deadline:  types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+		Winner:    "*",
 	}, game2)
 	game3, found3 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "3")
 	require.True(t, found3)
@@ -111,5 +115,6 @@ func TestCreate3GamesHasSavedFifo(t *testing.T) {
 		BeforeId:  "2",
 		AfterId:   "-1",
 		Deadline:  types.FormatDeadline(ctx.BlockTime().Add(types.MaxTurnDuration)),
+		Winner:    "*",
 	}, game3)
 }

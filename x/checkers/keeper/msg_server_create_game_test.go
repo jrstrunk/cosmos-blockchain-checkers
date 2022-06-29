@@ -54,12 +54,16 @@ func TestCreate1GameHasSaved(t *testing.T) {
 	game1, found1 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1")
 	require.True(t, found1)
 	require.EqualValues(t, types.StoredGame{
-		Creator: alice,
-		Index:   "1",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     bob,
-		Black:   carol,
+		Creator:  alice,
+		Index:    "1",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      bob,
+		Black:    carol,
+		Winner:   "*",
+		BeforeId: "-1",
+		AfterId:  "-1",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
 	}, game1)
 }
 
@@ -81,6 +85,8 @@ func TestCreate1GameGetAll(t *testing.T) {
 		Black:    carol,
 		BeforeId: "-1",
 		AfterId:  "-1",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, games[0])
 }
 
@@ -157,37 +163,51 @@ func TestCreate3GamesHasSaved(t *testing.T) {
 	nextGame, found := keeper.GetNextGame(sdk.UnwrapSDKContext(context))
 	require.True(t, found)
 	require.EqualValues(t, types.NextGame{
-		IdValue: 4,
+		IdValue:  4,
+		FifoHead: "1",
+		FifoTail: "3",
 	}, nextGame)
 	game1, found1 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1")
 	require.True(t, found1)
 	require.EqualValues(t, types.StoredGame{
-		Creator: alice,
-		Index:   "1",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     bob,
-		Black:   carol,
+		Creator:  alice,
+		Index:    "1",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      bob,
+		Black:    carol,
+		Winner:   "*",
+		BeforeId: "-1",
+		AfterId:  "2",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
 	}, game1)
 	game2, found2 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "2")
 	require.True(t, found2)
 	require.EqualValues(t, types.StoredGame{
-		Creator: bob,
-		Index:   "2",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     carol,
-		Black:   alice,
+		Creator:  bob,
+		Index:    "2",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      carol,
+		Black:    alice,
+		BeforeId: "1",
+		AfterId:  "3",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, game2)
 	game3, found3 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "3")
 	require.True(t, found3)
 	require.EqualValues(t, types.StoredGame{
-		Creator: carol,
-		Index:   "3",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     alice,
-		Black:   bob,
+		Creator:  carol,
+		Index:    "3",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      alice,
+		Black:    bob,
+		BeforeId: "2",
+		AfterId:  "-1",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, game3)
 }
 
@@ -211,35 +231,49 @@ func TestCreate3GamesGetAll(t *testing.T) {
 	games := keeper.GetAllStoredGame(sdk.UnwrapSDKContext(context))
 	require.Len(t, games, 3)
 	require.EqualValues(t, types.StoredGame{
-		Creator: alice,
-		Index:   "1",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     bob,
-		Black:   carol,
+		Creator:  alice,
+		Index:    "1",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      bob,
+		Black:    carol,
+		BeforeId: "-1",
+		AfterId:  "2",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, games[0])
 	require.EqualValues(t, types.StoredGame{
-		Creator: bob,
-		Index:   "2",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     carol,
-		Black:   alice,
+		Creator:  bob,
+		Index:    "2",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      carol,
+		Black:    alice,
+		BeforeId: "1",
+		AfterId:  "3",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, games[1])
 	require.EqualValues(t, types.StoredGame{
-		Creator: carol,
-		Index:   "3",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     alice,
-		Black:   bob,
+		Creator:  carol,
+		Index:    "3",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      alice,
+		Black:    bob,
+		BeforeId: "2",
+		AfterId:  "-1",
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, games[2])
 }
 
 func TestCreateGameFarFuture(t *testing.T) {
 	msgSrvr, keeper, context := setupMsgServerCreateGame(t)
 	keeper.SetNextGame(sdk.UnwrapSDKContext(context), types.NextGame{
-		IdValue: 1024,
+		IdValue:  1024,
+		FifoHead: types.NoFifoIdKey,
+		FifoTail: types.NoFifoIdKey,
 	})
 	createResponse, err := msgSrvr.CreateGame(context, &types.MsgCreateGame{
 		Creator: alice,
@@ -253,17 +287,23 @@ func TestCreateGameFarFuture(t *testing.T) {
 	nextGame, found := keeper.GetNextGame(sdk.UnwrapSDKContext(context))
 	require.True(t, found)
 	require.EqualValues(t, types.NextGame{
-		IdValue: 1025,
+		IdValue:  1025,
+		FifoHead: "1024",
+		FifoTail: "1024",
 	}, nextGame)
 	game1, found1 := keeper.GetStoredGame(sdk.UnwrapSDKContext(context), "1024")
 	require.True(t, found1)
 	require.EqualValues(t, types.StoredGame{
-		Creator: alice,
-		Index:   "1024",
-		Game:    "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
-		Turn:    "b",
-		Red:     bob,
-		Black:   carol,
+		Creator:  alice,
+		Index:    "1024",
+		Game:     "*b*b*b*b|b*b*b*b*|*b*b*b*b|********|********|r*r*r*r*|*r*r*r*r|r*r*r*r*",
+		Turn:     "b",
+		Red:      bob,
+		Black:    carol,
+		BeforeId: types.NoFifoIdKey,
+		AfterId:  types.NoFifoIdKey,
+		Deadline: "0001-01-02 00:00:00 +0000 UTC",
+		Winner:   "*",
 	}, game1)
 }
 
